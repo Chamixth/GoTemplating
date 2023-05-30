@@ -1,4 +1,4 @@
-module CodeGenerator
+module GenerateCrud
 
 go 1.20
 
