@@ -1,0 +1,53 @@
+package main
+import (
+	"context"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+func main() {
+	// Initialize Echo
+	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Create a new instance of the user controller
+	uc := controllers.NewUserController(getClient())
+
+	// Define the routes and their respective handlers
+	e.GET("/user/:id", uc.GetUser)
+	e.POST("/user/", uc.CreateUser)
+	e.PATCH("/user/:id", uc.UpdateUser)
+	e.DELETE("/user/:id", uc.DeleteUser)
+
+	// Start the server
+	e.Start(":8000")
+}
+
+func getClient() *mongo.Client {
+	//MongoDB connection string uri
+	uri := "{{.MongoUrl}}"
+
+	//Set client options
+	clientOptions := options.Client().ApplyURI(uri)
+	//Connect to MongoDB
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		panic(err)
+	}
+	//Ping the MongoDB server to check if its running
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		panic(err)
+	}
+
+	return client
+}
+
