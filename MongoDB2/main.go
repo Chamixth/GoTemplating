@@ -1,0 +1,52 @@
+package main
+
+import (
+	"MongoDB2/controllers"
+	"context"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+func main() {
+	// Initialize Echo
+	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Create a new instance of the user controller
+	uc := controllers.NewUserController(getClient())
+
+	// Define the routes and their respective handlers
+	e.GET("/user/:id", uc.GetUser)
+	e.POST("/user/", uc.CreateUser)
+	e.PATCH("/user/:id", uc.UpdateUser)
+	e.DELETE("/user/:id", uc.DeleteUser)
+	e.POST("user/setup", uc.SetupHandler)
+
+	// Start the server
+	e.Start(":8000")
+}
+
+func getClient() *mongo.Client {
+	//MongoDB connection string uri
+	uri := "mongodb+srv://chamith:123@cluster0.ujlq82i.mongodb.net/?retryWrites=true&w=majority"
+
+	//Set client options
+	clientOptions := options.Client().ApplyURI(uri)
+	//Connect to MongoDB
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		panic(err)
+	}
+	//Ping the MongoDB server to check if its running
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		panic(err)
+	}
+
+	return client
+}
