@@ -1,8 +1,6 @@
 package main
 
 import (
-	_ "encoding/json"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"io/ioutil"
 	"net/http"
@@ -30,25 +28,25 @@ func setupHandler(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "Invalid request")
 	}
 
-	err := executeTemplate("model.txt", "modelTemplate", params)
+	err := executeTemplate("crud.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\GeneratedCode\\main.go", "CrudTemplate", params)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Failed to generate model template")
 	}
 
-	err = executeTemplate("method.txt", "methodTemplate", params)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, "Failed to generate methods template")
-	}
-
-	err = executeTemplate("main.txt", "mainTemplate", params)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, "Failed to generate main template")
-	}
+	//err = executeTemplate("method.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\GeneratedCode\\controllers\\user.go", "methodTemplate", params)
+	//if err != nil {
+	//	return c.String(http.StatusInternalServerError, "Failed to generate methods template")
+	//}
+	//
+	//err = executeTemplate("main.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\GeneratedCode\\main.go", "mainTemplate", params)
+	//if err != nil {
+	//	return c.String(http.StatusInternalServerError, "Failed to generate main template")
+	//}
 
 	return c.String(http.StatusOK, "Setup completed successfully")
 }
 
-func executeTemplate(templFile string, templateName string, data interface{}) error {
+func executeTemplate(templFile string, generFile string, templateName string, data interface{}) error {
 	loadedTemplat, err := ioutil.ReadFile(templFile)
 	if err != nil {
 		return err
@@ -58,11 +56,9 @@ func executeTemplate(templFile string, templateName string, data interface{}) er
 		return err
 	}
 
-	fileName := fmt.Sprintf("%s.go", templateName)
+	outPutfile, err := os.Create(generFile)
 
-	file, err := os.Create(fileName)
-
-	err = tmpl.Execute(file, data)
+	err = tmpl.Execute(outPutfile, data)
 	if err != nil {
 		return err
 	}
