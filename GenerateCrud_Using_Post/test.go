@@ -28,12 +28,20 @@ func setupHandler(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "Invalid request")
 	}
 
-	err := executeTemplate("crud.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\GeneratedCode\\main.go", "CrudTemplate", params)
+	err := executeTemplate("model.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\generate\\MongoDB2\\models\\user.go", "CrudTemplate", params)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Failed to generate model template")
 	}
 
-	
+	err = executeTemplate("method.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\generate\\MongoDB2\\controllers\\user.go", "methodTemplate", params)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to generate methods template")
+	}
+
+	err = executeTemplate("main.txt", "C:\\Users\\chami\\OneDrive\\Desktop\\Chamith\\Repos\\GoTemplateProjects\\generate\\MongoDB2\\main.go", "mainTemplate", params)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to generate main template")
+	}
 
 	return c.String(http.StatusOK, "Setup completed successfully")
 }
