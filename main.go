@@ -22,7 +22,7 @@ func main() {
         log.Fatalf("Error parsing templates: %v", err)
     }
 
-    // Data for the templates
+    
     homeData := PageData{
         Title:   "Home Page",
         Message: "This is the home page rendered using Go templates.",
@@ -33,7 +33,7 @@ func main() {
         Message: "This is the about page rendered using Go templates.",
     }
 
-    // Render and save the templates
+    
     renderAndSaveTemplate(templates, "base.txt", homeData, "rendered_home.txt")
     renderAndSaveTemplate(templates, "base.txt", aboutData, "rendered_about.txt")
 }
