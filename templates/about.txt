@@ -1,0 +1,4 @@
+{{define "content"}}
+About Us
+Message: {{.Message}}
+{{end}}

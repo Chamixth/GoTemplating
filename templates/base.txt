@@ -1,0 +1,3 @@
+Title: {{.Title}}
+
+{{template "content" .}}
